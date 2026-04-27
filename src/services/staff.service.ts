@@ -332,8 +332,9 @@ class StaffService {
     if (params?.page) queryParams.append('page', String(params.page));
     if (params?.limit) queryParams.append('limit', String(params.limit));
     
-    const url = `/admin/coupons${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
-    return this.request(url, 'GET');
+    const query = queryParams.toString();
+    const endpoint = query ? `${STAFF_API_CONFIG.ENDPOINTS.MARKETING.COUPONS}?${query}` : STAFF_API_CONFIG.ENDPOINTS.MARKETING.COUPONS;
+    return this.request(endpoint, 'GET');
   }
 
   async createCoupon(data: {
@@ -349,7 +350,7 @@ class StaffService {
     isActive?: boolean;
     expiresAt?: string;
   }): Promise<any> {
-    return this.request('/admin/coupons', 'POST', data);
+    return this.request(STAFF_API_CONFIG.ENDPOINTS.MARKETING.COUPONS, 'POST', data);
   }
 
   async updateCoupon(id: string, data: {
@@ -364,81 +365,15 @@ class StaffService {
     isActive?: boolean;
     expiresAt?: string;
   }): Promise<any> {
-    return this.request(`/admin/coupons/${id}`, 'PUT', data);
+    return this.request(STAFF_API_CONFIG.ENDPOINTS.MARKETING.UPDATE_COUPON(id), 'PUT', data);
   }
 
   async deleteCoupon(id: string): Promise<any> {
-    return this.request(`/admin/coupons/${id}`, 'DELETE');
+    return this.request(STAFF_API_CONFIG.ENDPOINTS.MARKETING.DELETE_COUPON(id), 'DELETE');
   }
 
   async getCouponUsage(id: string): Promise<any> {
-    return this.request(`/admin/coupons/${id}/usage`, 'GET');
-  }
-
-  // Real Admin Coupon APIs
-  async getCoupons(params?: { isActive?: boolean; search?: string; page?: number; limit?: number }): Promise<any> {
-    const queryParams = new URLSearchParams();
-    if (params?.isActive !== undefined) queryParams.append('isActive', String(params.isActive));
-    if (params?.search) queryParams.append('search', params.search);
-    if (params?.page) queryParams.append('page', String(params.page));
-    if (params?.limit) queryParams.append('limit', String(params.limit));
-    
-    const query = queryParams.toString();
-    const endpoint = query ? `${STAFF_API_CONFIG.ENDPOINTS.MARKETING.COUPONS}?${query}` : STAFF_API_CONFIG.ENDPOINTS.MARKETING.COUPONS;
-    return this.request(endpoint, 'GET');
-  }
-
-  async createCouponReal(couponData: {
-    code: string;
-    description?: string;
-    discountType: 'percentage' | 'flat';
-    discountValue: number;
-    maxDiscount?: number;
-    minOrderValue?: number;
-    applicableFlows?: string[];
-    usageLimit?: number;
-    perUserLimit?: number;
-    isActive?: boolean;
-    expiresAt?: string;
-  }): Promise<any> {
-    return this.request(
-      STAFF_API_CONFIG.ENDPOINTS.MARKETING.COUPONS,
-      'POST',
-      couponData
-    );
-  }
-
-  async updateCoupon(id: string, couponData: {
-    description?: string;
-    discountType?: 'percentage' | 'flat';
-    discountValue?: number;
-    maxDiscount?: number;
-    minOrderValue?: number;
-    applicableFlows?: string[];
-    usageLimit?: number;
-    perUserLimit?: number;
-    isActive?: boolean;
-    expiresAt?: string;
-  }): Promise<any> {
-    return this.request(
-      STAFF_API_CONFIG.ENDPOINTS.MARKETING.UPDATE_COUPON(id),
-      'PUT',
-      couponData
-    );
-  }
-
-  async deleteCoupon(id: string): Promise<any> {
-    return this.request(
-      STAFF_API_CONFIG.ENDPOINTS.MARKETING.DELETE_COUPON(id),
-      'DELETE'
-    );
-  }
-
-  async getCouponUsage(id: string): Promise<any> {
-    return this.request(
-      STAFF_API_CONFIG.ENDPOINTS.MARKETING.COUPON_USAGE(id),
-      'GET'
-    );
+    return this.request(STAFF_API_CONFIG.ENDPOINTS.MARKETING.COUPON_USAGE(id), 'GET');
   }
 
   // ==================== ESCALATION APIs ====================

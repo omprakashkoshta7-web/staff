@@ -121,27 +121,7 @@ export default function TicketQueuePage() {
     }
   };
 
-  const doClose = async (ticketId: string) => {
-    try {
-      setActionLoading(true);
-      setActionError("");
-      const result = await staffService.closeTicket(ticketId);
-      if (result.success && result.data) {
-        setItems(p => p.map(t => 
-          (t._id === ticketId || t.id === ticketId) 
-            ? { ...t, ...result.data, status: 'resolved' } 
-            : t
-        ));
-        setDetail(null);
-      } else {
-        setActionError(result.message || "Failed to close ticket");
-      }
-    } catch (err: any) {
-      setActionError(err?.message || "Failed to close ticket.");
-    } finally {
-      setActionLoading(false);
-    }
-  };
+  // Removed unused doClose function
 
   const getSLA = (createdAt: string) => {
     const hours = Math.floor((Date.now() - new Date(createdAt).getTime()) / 3600000);
